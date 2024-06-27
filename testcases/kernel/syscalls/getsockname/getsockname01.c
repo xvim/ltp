@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-
 /*
  * Copyright (c) International Business Machines  Corp., 2001
  * 07/2001 Ported by Wayne Boyer
@@ -9,9 +8,11 @@
 /*\
  * [Description]
  * Verify that getsockname() returns the proper errno for various failure cases:
+ *
  * - EBADF on a not open file
  * - ENOTSOCK on a file descriptor not linked to a socket
  * - EFAULT on invalid socket buffer o invalid socklen
+ * - EINVALI on an invalid addrlen
  */
 
 #include "tst_test.h"
@@ -19,6 +20,7 @@
 static struct sockaddr_in sin0, fsin1;
 static int sock_null, sock_bind, sock_fake;
 static socklen_t sinlen;
+static socklen_t sininval = -1;
 
 static struct test_case {
 	int *sock;
@@ -37,6 +39,8 @@ static struct test_case {
 		.experrno = EFAULT, "invalid aligned salen"},
 	{ .sock = &sock_bind, .sockaddr = &fsin1, .addrlen = (socklen_t *) 1,
 		.experrno = EFAULT, "invalid unaligned salen"},
+	{ .sock = &sock_bind, .sockaddr = &fsin1, .addrlen = &sininval,
+		.experrno = EINVAL, "invalid socklen"},
 };
 
 static void check_getsockname(unsigned int nr)

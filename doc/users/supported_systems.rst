@@ -3,13 +3,21 @@
 Supported systems
 =================
 
+LTP `master <https://github.com/linux-test-project/ltp/commits/master>`_
+branch is build tested in
+`GitHub Actions <https://github.com/linux-test-project/ltp/actions>`_.
+
+.. note::
+
+      There is no CI for the actual test runs.
+
 Kernel version
 --------------
 
-Minimal supported kernel version is **3.10**.
+Minimal supported kernel version is **4.4**.
 
-Oldest tested distributions
----------------------------
+Oldest build tested distributions
+---------------------------------
 
 .. list-table::
     :header-rows: 1
@@ -38,13 +46,7 @@ Oldest tested distributions
       - 10.2.1
       - 11.0.1
 
-    * - RHEL-7.9 Maipo
-      - 3.10
-      - 4.8.5
-      - 2.17
-      - \-
-
-For a full list of tested distros, please check :master:`.github/workflows/ci-docker-build.yml`.
+For a full list of build tested distros, please check :master:`.github/workflows/ci-docker-build.yml`.
 
 Older distributions are not officially supported, which means that it
 may or may not work. It all depends on your luck. It should be possible
@@ -58,8 +60,8 @@ you may result to older LTP releases, however these are **not** supported
 in any way. Also if you are trying to run LTP on more than 10 years old
 distribution you may as well reconsider you life choices.
 
-Tested architectures
---------------------
+Build tested architectures
+--------------------------
 
 .. list-table::
     :header-rows: 1

@@ -56,11 +56,11 @@ test. At the time of writing there is no test for this call which was
 introduced in Linux kernel version 4.11.
 
 Linux system call specific tests are primarily contained in
-:master:`testcases/kernel/syscalls`, but you should also ``git grep`` the entire LTP
-repository to check for any existing usages of a system call.
+:master:`testcases/kernel/syscalls`, but you should also :git_man:`grep` the
+entire LTP repository to check for any existing usages of a system call.
 
 One way to find a system call which is not currently tested by the LTP is to
-look at ``include/linux/syscalls.h`` in the kernel tree.
+look at :kernel_tree:`include/linux/syscalls.h` in the Linux kernel tree.
 
 Something the LTP excels to ensure bug-fixes are back ported to
 maintenance releases, so targeting a specific regression is another
@@ -204,7 +204,7 @@ please do:
     ./statx01
 
 This should build the test and then run it. However, even though the test is
-in :master:`testcases/kernel/syscalls/` directory it won't be automatically ran
+in :master:`testcases/kernel/syscalls` directory it won't be automatically ran
 as part of the syscalls test group (e.g. not run via ``kirk -r math`` or
 ``./runltp -f syscalls``). For this we need to add it to the runtest file. So
 open :master:`runtest/syscalls` and add the lines starting with a ``+``.
@@ -252,7 +252,7 @@ to the below:
         smtpServer = smtp.server.address
 
 Obviously you need to at least change your name and e-mail. The SMTP server is
-useful for ``git send-email``, which we will discuss later. The editor value is
+useful for :git_man:`send-email`, which we will discuss later. The editor value is
 used for things like writing commits (without the ``-m`` option).
 
 .. code-block:: bash
@@ -303,11 +303,11 @@ cut down C library in comparison to the GNU one. So we must call ``statx()``
 using the general ``syscall()`` interface.
 
 The LTP contains a library for dealing with the ``syscall`` interface, which is
-located in ``include/lapi``. System call numbers are listed against the relevant
+located in :master:`include/lapi`. System call numbers are listed against the relevant
 call in the ``*.in`` files (e.g. ``x86_64.in``) which are used to generate
 ``syscalls.h``, which is the header you should include. On rare occasions you
 may find the system call number is missing from the ``*.in`` files and will need
-to add it (see ``include/lapi/syscalls/strip_syscall.awk``).
+to add it (see :master:`include/lapi/syscalls/strip_syscall.awk`).
 
 System call numbers vary between architectures, hence there are multiple
 ``*.in`` files for each architecture. You can find the various values for the
@@ -317,8 +317,8 @@ Note that we don't use the system-call-identifier value available in
 ``/usr/include/linux/uinstd.h`` because the kernel might be much newer than the
 user land development packages.
 
-For ``statx`` we had to add ``statx 332`` to ``include/lapi/syscalls/x86_64.in``,
-``statx 383`` to ``include/lapi/syscalls/powerpc.in``, etc.  Now lets look at
+For ``statx`` we had to add ``statx 332`` to :master:`include/lapi/syscalls/x86_64.in`,
+``statx 383`` to :master:`include/lapi/syscalls/powerpc.in`, etc.  Now lets look at
 the code, which I will explain in more detail further down.
 
 .. code-block:: c
@@ -384,7 +384,7 @@ So from the top we include the ``stdint.h`` library which gives us the standard
 ``(u)int*_t`` type definitions. We use these in place of the Kernel type
 definitions such as ``__u64`` in ``linux/types.h``. We then have a couple of
 structure definitions which form part of the ``statx`` API. These were copied
-from ``include/uapi/linux/stat.h`` in the Kernel tree.
+from :kernel_tree:`include/uapi/linux/stat.h` in the Linux kernel tree.
 
 After that, there is a wrapper function, which saves us from writing
 ``tst_syscall(__NR_statx, ...``, every time we want to make a call to
@@ -402,7 +402,7 @@ first choice.
 The final test should do a check during configuration (i.e. when we run
 ``./configure`` before building) which checks if the ``statx`` system call and
 associated structures exists. This requires writing an ``m4`` file for use with
-``configure.ac`` which is processed during ``make autotools`` and produces the
+:master:`configure.ac` which is processed during ``make autotools`` and produces the
 configure script.
 
 For the time being though we shall just ignore this. All you need to know for
@@ -457,7 +457,7 @@ being run.
 What are the differences between ``tst_brk`` and ``tst_res``?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See ``include/tst_test.h``. Also what do they have in common?
+See :master:`include/tst_test.h`. Also what do they have in common?
 
 What happens if you call ``tst_res(TINFO, ...)`` after ``sys_statx``?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -514,13 +514,13 @@ that should be by setting ``.needs_tmpdir = 1``.
     /*************** statx structure and wrapper goes here ! ***************/
     ...
 
-We have added an extra include ``lapi/fcntl.h`` which wraps the system header by
+We have added an extra include :master:`lapi/fcntl.h` which wraps the system header by
 the same name (``#include <fcntl.h>``). This header ensures we have definitions
 for recently added macros such as ``AT_FDCWD`` by providing fall backs if the
-system header does not have them. The ``lapi`` directory contains a number of
+system header does not have them. The :master:`lapi/` directory contains a number of
 headers like this.
 
-At some point we may wish to add ``lapi/stat.h`` to provide a fall back for
+At some point we may wish to add :master:`lapi/stat.h` to provide a fall back for
 macros such as ``STATX_BASIC_STATS``. However for the time being we have just
 defined it in the test.
 
@@ -756,7 +756,7 @@ the next section and come back later.
 Submitting the test for review
 ------------------------------
 
-Ignoring the fact we should probably create ``lapi/stat.h`` along with a bunch
+Ignoring the fact we should probably create :master:`lapi/stat.h` along with a bunch
 of fallback logic in the build system. We can now get our test ready for
 submission.
 
@@ -903,7 +903,7 @@ re-committing.
 
 You can also use ``edit`` and ``git commit --amend`` together to change a commit
 deep in your history, but without resetting the 'index'. The 'index' contains
-changes which you have staged with ``git add``, but not yet committed.
+changes which you have staged with :git_man:`add`, but not yet committed.
 
 So now that the commit history has been cleaned up, we need to submit a patch
 to the mailing list or make a pull request on GitHub. The mailing list is the
@@ -941,10 +941,8 @@ of the conflict. Usually, all you need to do is remove the lines you don't
 want, stage the changes and continue the ``rebase`` with ``git rebase
 --continue``.
 
-In order to create a patch e-mail we use
-`git format-patch <https://git-scm.com/docs/git-format-patch>`_,
-we can then send that e-mail using
-`git send-email <https://git-scm.com/docs/git-send-email>`_.
+In order to create a patch e-mail we use :git_man:`format-patch`,
+we can then send that e-mail using :git_man:`send-email`.
 It is also possible to import the patch (``mbox``) file into a number of e-mail
 programs.
 
@@ -991,9 +989,8 @@ are the most important errors to find as they always result in false test
 results. Once someone points out such an error it is usually obvious to
 everyone that it is a bug and needs to be fixed.
 
-Obviously testing the patch is one way of finding errors. You can apply
-patches using ``git am``. Then it is just a case of compiling and running the
-tests.
+Obviously testing the patch is one way of finding errors. You can apply patches
+using :git_man:`am`. Then it is just a case of compiling and running the tests.
 
 Finally, reading and attempting to comment on other peoples patches, gives
 you a better understanding of the reviewers perspective. This is better for

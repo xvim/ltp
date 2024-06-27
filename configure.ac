@@ -41,6 +41,7 @@ AC_CHECK_DECLS([SEM_STAT_ANY],,,[#include <sys/sem.h>])
 
 AC_CHECK_HEADERS_ONCE([ \
     asm/ldt.h \
+    asm/prctl.h \
     cpuid.h \
     emmintrin.h \
     ifaddrs.h \
@@ -180,7 +181,11 @@ AC_CHECK_TYPES([struct file_handle],,,[
 #include <fcntl.h>
 ])
 
-AC_CHECK_TYPES([struct fs_quota_statv],,,[#include <xfs/xqm.h>])
+AC_CHECK_TYPES([struct fs_quota_statv],,,[
+#define _GNU_SOURCE
+#include <xfs/xqm.h>
+])
+
 AC_CHECK_TYPES([struct if_nextdqblk],,,[#include <linux/quota.h>])
 AC_CHECK_TYPES([struct iovec],,,[#include <sys/uio.h>])
 AC_CHECK_TYPES([struct ipc64_perm],,,[#include <sys/ipcbuf.h>])
@@ -220,7 +225,8 @@ AC_CHECK_TYPES([struct xt_entry_match, struct xt_entry_target],,,[
 ])
 
 AC_CHECK_TYPES([struct __kernel_old_timeval, struct __kernel_old_timespec, struct __kernel_timespec,
-                struct __kernel_old_itimerspec, struct __kernel_itimerspec],,,[#include <sys/socket.h>])
+                struct __kernel_old_itimerspec, struct __kernel_itimerspec,
+                struct __kernel_old_itimerval],,,[#include <sys/socket.h>])
 
 AC_CHECK_TYPES([struct futex_waitv],,,[#include <linux/futex.h>])
 AC_CHECK_TYPES([struct mount_attr],,,[
@@ -392,7 +398,9 @@ LTP_CHECK_SYSCALL_FCNTL
 LTP_CHECK_FSVERITY
 
 AX_CHECK_COMPILE_FLAG([-no-pie], [LTP_CFLAGS_NOPIE=1])
+AX_CHECK_COMPILE_FLAG([-ffixed-ebp], [LTP_CFLAGS_FFIXED_EBP=1])
 AC_SUBST([LTP_CFLAGS_NOPIE])
+AC_SUBST([LTP_CFLAGS_FFIXED_EBP])
 
 if test "x$with_numa" = xyes; then
 	LTP_CHECK_SYSCALL_NUMA

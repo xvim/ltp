@@ -31,6 +31,8 @@ alarm05 alarm05
 alarm06 alarm06
 alarm07 alarm07
 
+arch_prctl01 arch_prctl01
+
 bind01 bind01
 bind02 bind02
 bind03 bind03
@@ -781,6 +783,7 @@ mlock01 mlock01
 mlock02 mlock02
 mlock03 mlock03 -i 20
 mlock04 mlock04
+mlock05 mlock05
 
 mlock201 mlock201
 mlock202 mlock202
@@ -1461,6 +1464,9 @@ shmget03 shmget03
 shmget04 shmget04
 shmget05 shmget05
 shmget06 shmget06
+
+shutdown01 shutdown01
+shutdown02 shutdown02
 
 sigaction01 sigaction01
 sigaction02 sigaction02
